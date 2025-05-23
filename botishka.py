@@ -2,7 +2,6 @@ import sqlite3
 import telebot
 from telebot import types
 import os
-
 # Константы
 TOKEN = "6896892992:AAHHll2f4cwxis_1ykbOUQf750a6AmVyumU"
 DB_NAME = "sqlite3.db"
@@ -1444,6 +1443,8 @@ def confirm_booking(call):
         
         bot.answer_callback_query(call.id, "✅ Бронирование подтверждено!")
         bot.send_message(call.message.chat.id, "🎉 Ваш столик забронирован!")
+
+        show_main_menu(call.message.chat.id)
         
     except Exception as e:
         bot.answer_callback_query(call.id, "❌ Произошла ошибка при подтверждении бронирования.")
@@ -1452,6 +1453,22 @@ def confirm_booking(call):
     finally:
         cursor.close()
         conn.close()
+        
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+        markup.add(
+            types.KeyboardButton('👤 Профиль'),
+            types.KeyboardButton('🏢 Рестораны'),
+            types.KeyboardButton('📖 История бронирований'),
+            types.KeyboardButton('🏆 Топ официантов')
+        )
+        bot.send_message(
+            call.message.chat.id,
+            "🏠 Главное меню:",
+            reply_markup=markup
+        )   
+
+
 
         # Удаляем сообщение с кнопками
         try:
@@ -1583,6 +1600,22 @@ def confirm_with_tips(call):
             del booking_sessions[user_id]
         if conn:
             conn.close()
+
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+        markup.add(
+            types.KeyboardButton('👤 Профиль'),
+            types.KeyboardButton('🏢 Рестораны'),
+            types.KeyboardButton('📖 История бронирований'),
+            types.KeyboardButton('🏆 Топ официантов')
+        )
+        bot.send_message(
+            call.message.chat.id,
+            "🏠 Главное меню:",
+            reply_markup=markup
+        )   
+
+
 
 
 # =============================================
